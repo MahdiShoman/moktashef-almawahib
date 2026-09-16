@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>مُكْتَشِفُ الْمَوَاهِبِ | فهم المقروء</title>
+<style>
+*{box-sizing:border-box}
+:root{
+  --ink:#24324a;--muted:#6d7890;--paper:#fffdf8;--card:#ffffff;
+  --line:#e9e5dc;--pink:#ef6f9d;--purple:#7867d8;--blue:#4f9ed8;
+  --yellow:#f4bd45;--green:#51b788;--shadow:0 18px 50px rgba(48,40,77,.12)
+}
+body{
+  margin:0;min-height:100vh;font-family:"Tahoma","Arial",sans-serif;color:var(--ink);
+  background:
+    radial-gradient(circle at 10% 10%,rgba(239,111,157,.18),transparent 28%),
+    radial-gradient(circle at 90% 12%,rgba(120,103,216,.17),transparent 28%),
+    linear-gradient(135deg,#fff9f4 0%,#f5f2ff 52%,#eef9fb 100%);
+}
+button,input{font:inherit}
+button{cursor:pointer}
+.app{width:min(940px,calc(100% - 28px));margin:28px auto 40px}
+.shell{background:rgba(255,255,255,.84);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.9);border-radius:30px;box-shadow:var(--shadow);overflow:hidden}
+.header{padding:24px 28px 16px;display:flex;justify-content:space-between;gap:16px;align-items:center}
+.brand{display:flex;align-items:center;gap:13px}
+.logo{width:52px;height:52px;border-radius:17px;display:grid;place-items:center;background:linear-gradient(135deg,#ffd66b,#ef6f9d);font-size:28px;box-shadow:0 9px 20px rgba(239,111,157,.25)}
+.brand b{display:block;font-size:15px}.brand span{display:block;color:var(--muted);font-size:12px;margin-top:3px}
+.badge{padding:9px 13px;border-radius:999px;background:#fff8dc;border:1px solid #f2e3ae;font-size:12px;font-weight:800}
+.content{padding:0 28px 30px}
+.hero{text-align:center;padding:24px 10px 30px}
+.kicker{display:inline-block;color:#8a6a18;background:#fff4cf;border:1px solid #f0dfaa;border-radius:999px;padding:8px 13px;font-weight:800;font-size:13px}
+h1{font-size:clamp(30px,6vw,52px);margin:15px 0 8px;letter-spacing:-1px}
+.hero p{color:var(--muted);line-height:1.9;margin:5px auto;max-width:680px}
+.teacher{font-weight:800;color:#7057c8!important}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px auto 0;max-width:700px}
+.field{background:var(--paper);border:1px solid var(--line);padding:14px;border-radius:18px;text-align:right}
+.field label{font-weight:800;font-size:13px}.field input{display:block;width:100%;margin-top:8px;border:1px solid #ddd8cd;border-radius:12px;padding:12px 13px;background:white;outline:none}
+.field input:focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(120,103,216,.12)}
+.primary{border:0;color:white;background:linear-gradient(135deg,#7867d8,#ef6f9d);padding:15px 24px;border-radius:15px;font-weight:900;box-shadow:0 10px 24px rgba(120,103,216,.24);margin-top:15px}
+.primary:hover{transform:translateY(-1px)}
+.note{font-size:12px;color:var(--muted);margin-top:10px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.progress-wrap{flex:1;min-width:190px}
+.progress-label{font-size:12px;font-weight:800;color:var(--muted);margin-bottom:7px}
+.progress{height:10px;background:#ebe9e4;border-radius:99px;overflow:hidden}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#7867d8,#ef6f9d);border-radius:99px;transition:width .35s}
+.score{background:#fff8dc;border:1px solid #f0dfaa;padding:10px 14px;border-radius:14px;font-weight:900;white-space:nowrap}
+.question-card{border:1px solid var(--line);background:white;border-radius:25px;padding:25px}
+.qtag{display:inline-block;padding:8px 11px;border-radius:12px;background:#f0edff;color:#6454b8;font-weight:900;font-size:13px}
+.question{font-size:clamp(21px,3.3vw,29px);line-height:1.8;margin:16px 0 19px}
+.answers{display:grid;gap:11px}
+.answer{border:2px solid #ece8df;background:#fffdf9;color:var(--ink);text-align:right;padding:15px 16px;border-radius:16px;line-height:1.75;display:flex;gap:11px;align-items:flex-start;transition:.18s}
+.answer:hover:not(:disabled){border-color:#bcb3ed;background:#faf8ff;transform:translateY(-1px)}
+.answer .letter{width:31px;height:31px;min-width:31px;border-radius:10px;display:grid;place-items:center;background:#f0edff;color:#6454b8;font-weight:900}
+.answer.correct{border-color:#5abb8b;background:#effbf5}.answer.correct .letter{background:#d5f4e3;color:#25825b}
+.answer.wrong{border-color:#e88a9b;background:#fff2f4}.answer.wrong .letter{background:#ffdce3;color:#a53f54}
+.answer:disabled{cursor:default}
+.feedback{margin-top:16px;border-radius:16px;padding:14px 16px;line-height:1.8;font-weight:800;display:none}
+.feedback.show{display:block}.feedback.good{background:#effbf5;border:1px solid #c8ecd9;color:#237c58}.feedback.bad{background:#fff5f0;border:1px solid #f1d4c4;color:#8d5946}
+.actions{display:flex;justify-content:flex-start;margin-top:14px}
+.next{border:0;background:#24324a;color:white;padding:13px 20px;border-radius:13px;font-weight:900;display:none}
+.result{text-align:center;padding:22px 8px 12px}
+.result-icon{font-size:65px}.result h2{font-size:34px;margin:8px 0}.stars{font-size:38px;letter-spacing:4px;margin:14px 0}
+.result-box{background:#fffdf8;border:1px solid var(--line);border-radius:20px;padding:18px;max-width:580px;margin:20px auto;line-height:2}
+.result-box strong{color:#7057c8}
+.restart{border:1px solid #ddd8cd;background:white;color:var(--ink);padding:12px 19px;border-radius:13px;font-weight:900}
+.hidden{display:none!important}
+.footer{text-align:center;color:#9298a5;font-size:11px;margin-top:15px}
+@media(max-width:620px){.app{width:min(100% - 16px,940px);margin-top:10px}.header{padding:18px 18px 12px}.content{padding:0 18px 22px}.info-grid{grid-template-columns:1fr}.question-card{padding:18px}.brand span{display:none}.badge{font-size:11px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="shell">
+    <header class="header">
+      <div class="brand"><div class="logo">⭐</div><div><b>رحلة في رحاب الموهبة والنجاح</b><span>فهم المقروء • الصف الرابع</span></div></div>
+      <div class="badge">🎯 لعبة تعليمية</div>
+    </header>
+
+    <main class="content">
+      <section id="startScreen" style="display:block">
+        <div class="hero">
+          <div class="kicker">🌟 مِحْوَرُ الإِبْدَاعِ التَّفَاعُلِيِّ 🌟</div>
+          <h1>مُكْتَشِفُ الْمَوَاهِبِ</h1>
+          <p>أهلاً بك يا نجم المستقبل! اختبر فهمك لدرس <strong>«الفضل لمعلمتي»</strong> واجمع النجوم مع كل إجابة صحيحة.</p>
+          <p class="teacher">👩‍🏫 إعداد المعلمة المبدعة: رفعة شومان</p>
+          <div class="info-grid">
+            <div class="field"><label for="school">🏫 اسم المدرسة</label><input id="school" maxlength="80" placeholder="اكتب اسم المدرسة"></div>
+            <div class="field"><label for="student">👤 اسم الطالب(ة)</label><input id="student" maxlength="60" placeholder="اكتب اسم الطالب(ة)"></div>
+          </div>
+          <button class="primary" id="startBtn" type="button">🚀 ابدأ رحلة اكتشاف المواهب</button>
+          <div class="note">لن يتم إرسال أو حفظ أي بيانات. اللعبة تعمل محليًا داخل المتصفح.</div><div id="validation" style="display:none;margin-top:10px;color:#a53f54;font-weight:800" aria-live="polite">⚠️ اكتب اسم الطالب(ة) أولًا للبدء.</div>
+        </div>
+      </section>
+
+      <section id="gameScreen" style="display:none">
+        <div class="topbar">
+          <div class="progress-wrap">
+            <div class="progress-label" id="progressLabel">السؤال 1 من 5</div>
+            <div class="progress"><i id="progressBar"></i></div>
+          </div>
+          <div class="score" id="score">⭐ 0 / 5</div>
+        </div>
+        <div class="question-card">
+          <div class="qtag" id="qTag">السُّؤَالُ الأَوَّلُ</div>
+          <div class="question" id="question"></div>
+          <div class="answers" id="answers"></div>
+          <div class="feedback" id="feedback" aria-live="polite"></div>
+          <div class="actions"><button class="next" id="nextBtn" type="button">السؤال التالي ←</button></div>
+        </div>
+      </section>
+
+      <section id="resultScreen" class="result" style="display:none">
+        <div class="result-icon">🏆</div>
+        <h2>أحسنت يا نجم المستقبل!</h2>
+        <div class="stars" id="stars"></div>
+        <div class="result-box" id="resultBox"></div>
+        <button class="restart" id="restartBtn" type="button">🔄 إعادة اللعبة</button>
+      </section>
+    </main>
+  </div>
+  <div class="footer">مُصمَّمة للتعلّم الممتع والتفاعلي ✨</div>
+</div>
+
+<script>
+(function(){
+"use strict";
+const questions=[
+{q:"مَنْ يَرْعَى الْقُدُرَاتِ وَالْمَوَاهِبَ فَتَظْهَرُ وَتَتَمَيَّزُ؟",a:["مَنْ لا يَهْتَمُّ بِهَا.","مَنْ يَجِدُ مَنْ يَكْتَشِفُهَا، وَيَرْعَاهَا، وَيَهْتَمُّ بِهَا.","الطَّقْسُ وَالْبِيئَةُ فَقَط."],c:1,f:"أَحْسَنْتَ! فَالتَّشْجِيعُ وَالرِّعَايَةُ هُمَا سِرُّ إِظْهَارِ الْمَوَاهِبِ وَتَمَيُّزِهَا."},
+{q:"كَيْفَ كَانَتْ «هَيَا» فِي صِغَرِهَا عِنْدَمَا اكْتُشِفَتْ مَوْهِبَتُهَا؟",a:["كَانَتْ جَرِيئَةً وَقَوِيَّةَ الشَّخْصِيَّةِ جِدًّا فِي الإِلْقَاءِ.","كَانَتْ بِنْتًا خَجُولَةً، تَحْتَاجُ إِلَى مَنْ يَزِيدُ ثِقَتَهَا بِنَفْسِهَا.","كَانَتْ تُحِبُّ الْغِنَاءَ فَقَط."],c:1,f:"مُمْتَاز! بَابُ النَّجَاحِ يُفْتَحُ عِنْدَمَا نَجِدُ مَنْ يَدْعَمُ خَجَلَنَا وَيُعَزِّزُ ثِقَتَنَا بِأَنْفُسِنَا."},
+{q:"مَاذَا تُقَدِّمُ «هَيَا» الْيَوْمَ فِي التِّلْفَازِ الْوَطَنِيِّ؟",a:["بَرَامِجَ سِيَاسِيَّةً لِلْكِبَارِ.","بَرَامِجَ أَطْفَالٍ مَشْهُورَةً، تُسْتَضِيفُ الأَطْفَالَ وَتَكْتَشِفُ مَوَاهِبَهُمْ.","أَفْلَامًا كَرْتُونِيَّةً قَدِيمَةً."],c:1,f:"رَائِعٌ! وَقَدْ أَصْبَحَ الأَطْفَالُ يُحِبُّونَهَا كَثِيرًا وَيُنَادُونَهَا: مَامَا هَيَا."},
+{q:"لِمَاذَا دَخَلَتْ هَيَا كُلِّيَّةَ الصِّحَافَةِ وَالإِعْلَامِ؟",a:["إِرْضَاءً لِأَصْدِقَائِهَا فِي الْمَدْرَسَةِ.","لِأَنَّ مُعَلِّمَتَهَا اكْتَشَفَتْ مَوْهِبَتَهَا وَشَجَّعَتْهَا عَبْرَ تَدْرِيبِهَا وَإِعْدَادِ الْمَوَادِّ لِلْإِذَاعَةِ.","لِتُصْبِحَ مُهَنْدِسَةً مِعْمَارِيَّةً."],c:1,f:"أَصَبْتَ! فَفَضْلُ الْمُعَلِّمَةِ هُوَ الْأَسَاسُ فِي هَذَا التَّمَيُّزِ."},
+{q:"مَا الْحِكْمَةُ أَوِ الْعِبْرَةُ الَّتِي نَتَعَلَّمُهَا مِنْ خَاتِمَةِ الدَّرْسِ؟",a:["أَنْ يَدْرُسَ كُلُّ مِنَّا مَا يُحِبُّ، وَيَعْمَلَ فِيمَا يُحِبُّ.","أَنْ نَتْرُكَ الدِّرَاسَةَ عِنْدَ مُوَاجَهَةِ الصُّعُوبَاتِ.","أَلَّا نُشَارِكَ فِي الإِذَاعَةِ الْمَدْرَسِيَّةِ."],c:0,f:"عَمَلٌ مُبْدِعٌ! حُبُّ الْعَمَلِ وَالدِّرَاسَةِ هُمَا مِفْتَاحُ السَّعَادَةِ وَالتَّمَيُّزِ فِي الْحَيَاةِ."}
+];
+const names=["الأَوَّلُ","الثَّانِي","الثَّالِثُ","الرَّابِعُ","الْخَامِسُ"];
+const $=id=>document.getElementById(id);
+let idx=0,score=0,locked=false,student="",school="";
+// Explicit initial state so the game is reliable even if a host/browser alters inline styles.
+$("startScreen").style.display="block";
+$("gameScreen").style.display="none";
+$("resultScreen").style.display="none";
+function start(){
+  try{
+    student=$("student").value.trim();
+    school=$("school").value.trim();
+    if(!student){
+      $("student").focus();
+      $("student").style.borderColor="#d65d73";
+      $("validation").style.display="block";
+      return;
+    }
+    $("student").style.borderColor="";
+    $("validation").style.display="none";
+    idx=0; score=0; locked=false;
+    $("startScreen").style.display="none";
+    $("resultScreen").style.display="none";
+    $("gameScreen").style.display="block";
+    render();
+    window.scrollTo({top:0,behavior:"smooth"});
+  }catch(err){
+    console.error("Game start error:",err);
+    alert("حدث خطأ أثناء بدء اللعبة. يرجى تحديث الصفحة والمحاولة مرة أخرى.");
+  }
+}
+function render(){
+ const x=questions[idx];locked=false;
+ $("qTag").textContent="السُّؤَالُ "+names[idx];
+ $("progressLabel").textContent="السؤال "+(idx+1)+" من "+questions.length;
+ $("progressBar").style.width=((idx+1)/questions.length*100)+"%";
+ $("score").textContent="⭐ "+score+" / 5";
+ $("question").textContent=x.q;
+ $("answers").innerHTML="";
+ $("feedback").className="feedback";$("feedback").textContent="";
+ $("nextBtn").style.display="none";
+ x.a.forEach((text,i)=>{
+  const b=document.createElement("button");b.type="button";b.className="answer";
+  const letter=document.createElement("span");letter.className="letter";letter.textContent=["أ","ب","ج"][i];
+  const body=document.createElement("span");body.textContent=text;
+  b.append(letter,body);b.addEventListener("click",()=>choose(i));$("answers").appendChild(b);
+ });
+}
+function choose(i){
+ if(locked)return;locked=true;
+ const x=questions[idx],bs=[...$("answers").children];
+ bs.forEach(b=>b.disabled=true);
+ bs[x.c].classList.add("correct");
+ if(i===x.c){score++;$("feedback").className="feedback show good";$("feedback").textContent="⭐ "+x.f}
+ else{$("feedback").className="feedback show bad";$("feedback").textContent="💡 الإجابة الصحيحة هي: "+["أ","ب","ج"][x.c]+" — "+x.a[x.c];bs[i].classList.add("wrong")}
+ $("score").textContent="⭐ "+score+" / 5";
+ $("nextBtn").textContent=idx===questions.length-1?"عرض النتيجة 🏆":"السؤال التالي ←";
+ $("nextBtn").style.display="inline-block";
+}
+function next(){
+  if(!locked)return;
+  if(idx<questions.length-1){idx++;render();}
+  else finish();
+}
+function finish(){
+ $("gameScreen").style.display="none";
+ $("resultScreen").style.display="block";
+ $("stars").textContent="⭐".repeat(score)+"☆".repeat(5-score);
+ const msg=score===5?"رائع جدًا! لقد أتقنت فهم الدرس بالكامل.":score>=3?"أداء جميل! أنت على طريق التميّز، واصل التعلّم.":"محاولة جميلة! اقرأ الدرس مرة أخرى وحاول جمع نجوم أكثر.";
+ $("resultBox").innerHTML="<div>👤 الطالب(ة): <strong>"+esc(student)+"</strong></div><div>🏫 المدرسة: <strong>"+esc(school||"—")+"</strong></div><div>🎯 النتيجة: <strong>"+score+" من 5</strong></div><div>✨ "+msg+"</div><div>👩‍🏫 إعداد المعلمة المبدعة: <strong>رفعة شومان</strong></div>";
+}
+function esc(s){return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]))}
+function restart(){
+  $("resultScreen").style.display="none";
+  $("gameScreen").style.display="none";
+  $("startScreen").style.display="block";
+  $("student").focus();
+}
+$("startBtn").addEventListener("click",start);$("nextBtn").addEventListener("click",next);$("restartBtn").addEventListener("click",restart);
+$("student").addEventListener("input",()=>{
+  if($("student").value.trim()){$("student").style.borderColor="";$("validation").style.display="none"}
+});
+$("student").addEventListener("keydown",e=>{if(e.key==="Enter")start()});
+})();
+</script>
+</body>
+</html>
